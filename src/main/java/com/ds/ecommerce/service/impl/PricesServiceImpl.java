@@ -7,6 +7,7 @@ import com.ds.ecommerce.service.PricesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,7 @@ public class PricesServiceImpl implements PricesService {
 
     private final PricesRepository pricesRepository;
     @Override
+    @Transactional(readOnly = true)
     public Price getPrice(String date, int productId, int brandId) {
         List<Price> prices = pricesRepository.findAllPricesInAPeriod(
                 brandId, productId, convertStringToLocalDateTime(date));

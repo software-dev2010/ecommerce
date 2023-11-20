@@ -1,7 +1,6 @@
 package com.ds.ecommerce.handler;
 
 import com.ds.ecommerce.exception.PriceNotFoundException;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,18 +42,6 @@ public class PricesGlobalExceptionHandler {
     public ErrorDTO handleException(PriceNotFoundException priceNotFoundException) {
         String exceptionMessage = priceNotFoundException.getMessage();
         log.error(exceptionMessage, priceNotFoundException);
-        return ErrorDTO.builder()
-                .code(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(exceptionMessage)
-                .build();
-    }
-
-    @ResponseBody
-    @ExceptionHandler(value = {NotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorDTO handleException(NotFoundException notFoundException) {
-        String exceptionMessage = notFoundException.getMessage();
-        log.error(exceptionMessage, notFoundException);
         return ErrorDTO.builder()
                 .code(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .message(exceptionMessage)
