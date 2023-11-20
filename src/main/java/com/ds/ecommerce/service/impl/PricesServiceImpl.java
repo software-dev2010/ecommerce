@@ -23,14 +23,18 @@ public class PricesServiceImpl implements PricesService {
     @Override
     @Transactional(readOnly = true)
     public Price getPrice(String date, int productId, int brandId) {
+        String message = "Prices not found for BRAND_ID " + brandId +
+                " and PRODUCT_ID " + productId + " and date " + date;
+
         List<Price> prices = pricesRepository.findAllPricesInAPeriod(
-                brandId, productId, convertStringToLocalDateTime(date));
+                brandId, productId, convertStringToLocalDateTime(date))
+                .orElseThrow(() -> new PriceNotFoundException(message));
 
         log.info("Price list from db = {}", prices);
 
         Price price = prices.stream()
                 .max(Comparator.comparing(Price::getPriority))
-                .orElseThrow(() -> new PriceNotFoundException("Prices not found"));
+                .orElseThrow(() -> new PriceNotFoundException(message));
 
         log.info("Price with high priority = {}", price);
 
